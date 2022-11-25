@@ -24,15 +24,17 @@ async function run(){
 try{
     const categoryCollection = client.db('secondHandUser').collection('categories')
     const productCollection = client.db('secondHandUser').collection('products')
+    const bookingCollection = client.db('secondHandUser').collection('bookings')
 
 
-
+//load categories
     app.get('/categories', async(req,res)=>{
         const query = {}
         const options = await categoryCollection.find(query).toArray();
         res.send(options)
     })
 
+    //load category products
     app.get('/categories/:id', async(req,res)=>{
         const id = req.params.id;
         const query = {}
@@ -40,6 +42,15 @@ try{
         const product_collection = products.filter(p => p.category_id == id)
         console.log(products, id)
         res.send(product_collection)
+    })
+
+    //post modal data
+
+    app.post('/bookings', async(req,res) =>{
+        const booking = req.body
+        console.log(booking)
+        const result = await bookingCollection.insertOne(booking);
+        res.send(result)
     })
 }
 finally{
