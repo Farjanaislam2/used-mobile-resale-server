@@ -25,6 +25,7 @@ try{
     const categoryCollection = client.db('secondHandUser').collection('categories')
     const productCollection = client.db('secondHandUser').collection('products')
     const bookingCollection = client.db('secondHandUser').collection('bookings')
+    const usersCollection = client.db('secondHandUser').collection('users')
 
 
 //load categories
@@ -60,6 +61,13 @@ try{
         const query = {email:email};
         const bookings = await bookingCollection.find(query).toArray();
         res.send(bookings);
+    })
+
+    //users save
+    app.post('/users', async(req,res) =>{
+        const user = req.body;
+        const result = await usersCollection.insertOne(user);
+        res.send(result);
     })
 }
 finally{
