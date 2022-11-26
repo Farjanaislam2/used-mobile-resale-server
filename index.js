@@ -133,12 +133,13 @@ try{
     
     })
 
-    app.post('/sellers', async(req,res) =>{
-        const seller = req.body;
-        const result = await usersCollection.insertOne(seller );
-        res.send(result);
-    })
 
+    app.get('/users/sellers/:email', async(req,res)=>{
+        const email = req.params.email;
+        const query = {email}
+        const user = await usersCollection.findOne(query);
+        res.send({isSeller: user?.role === 'seller'})
+    })
 
     //admin
     app.put('/users/admin/:id',verifyJWT, async(req,res)=>{
