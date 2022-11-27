@@ -63,6 +63,13 @@ try{
         res.send(product_collection)
     })
 
+    //
+    // app.put('/sellerVerify/:email', async (req,res)=>{
+    //     const id = req.params.email;
+    //     console.log(id)
+
+    // })
+
     //post modal data
 
     app.post('/bookings', async(req,res) =>{
@@ -84,6 +91,14 @@ try{
         const query = {email:email};
         const bookings = await bookingCollection.find(query).toArray();
         res.send(bookings);
+    })
+
+    //add data 
+    app.get('/addProductCategory', async(req,res)=>{
+        const query= {}
+        const result =await categoryCollection.find(query).project({name: 1}).toArray();
+        res.send(result)
+
     })
 
     //jwt
@@ -133,8 +148,8 @@ try{
     
     })
 
-
-    app.get('/users/sellers/:email', async(req,res)=>{
+//verify
+    app.get('/users/sellers/:email',  async(req,res)=>{
         const email = req.params.email;
         const query = {email}
         const user = await usersCollection.findOne(query);
