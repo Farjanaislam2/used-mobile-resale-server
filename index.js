@@ -44,6 +44,7 @@ try{
     const productCollection = client.db('secondHandUser').collection('products')
     const bookingCollection = client.db('secondHandUser').collection('bookings')
     const usersCollection = client.db('secondHandUser').collection('users')
+    const myProductsCollection = client.db('secondHandUser').collection('myProducts')
 
 
 //load categories
@@ -79,6 +80,8 @@ try{
         res.send(result)
     })
 
+
+
     //order
 
     app.get('/bookings', verifyJWT, async (req,res)=>{
@@ -96,7 +99,8 @@ try{
     //add data 
     app.get('/addProductCategory', async(req,res)=>{
         const query= {}
-        const result =await categoryCollection.find(query).project({name: 1}).toArray();
+        const result =await categoryCollection.find(query).toArray();
+        console.log(result)
         res.send(result)
 
     })
@@ -194,6 +198,21 @@ try{
         }
     })
     
+
+    //addmyProducts
+
+    app.get('/myProducts', async(req,res)=>{
+        const query ={};
+        const myProduct = await myProductsCollection.find(query).toArray();
+        res.send(myProduct);
+    })
+
+
+    app.post('/myProducts', async(req,res)=>{
+        const myProduct = req.body;
+        const result = await myProductsCollection.insertOne(myProduct);
+        res.send(result);
+    })
 }
 finally{
 
