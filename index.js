@@ -181,8 +181,8 @@ try{
     })
 
     //user delte
-        //sellerDelete
-app.delete('/users/:id',async (req,res) =>{
+        
+app.delete('/users/:id',verifyJWT,async (req,res) =>{
     const id =req.params.id;
     const filter = {_id: ObjectId(id)};
     const result =await usersCollection.deleteOne(filter);
@@ -194,7 +194,7 @@ app.delete('/users/:id',async (req,res) =>{
 
 
     // seller
-    app.get('/sellers', verifyJWT, async(req,res)=>{
+    app.get('/sellers', async(req,res)=>{
         const query ={role: 'seller'};
         const seller = await usersCollection.find(query).toArray();
         res.send(seller);
@@ -202,7 +202,7 @@ app.delete('/users/:id',async (req,res) =>{
     })
 
     //sellerDelete
-app.delete('/sellers/:id',async (req,res) =>{
+app.delete('/sellers/:id',verifyJWT,async (req,res) =>{
     const id =req.params.id;
     const filter = {_id: ObjectId(id)};
     const result =await usersCollection.deleteOne(filter);
@@ -256,7 +256,7 @@ app.delete('/sellers/:id',async (req,res) =>{
 
     //addmyProducts
 
-    app.get('/myProducts/:email', async(req,res)=>{
+    app.get('/myProducts/:email',verifyJWT, async(req,res)=>{
         const email = req.params.email;
         console.log(email)
         const query ={sellerEmail : email};
@@ -265,7 +265,7 @@ app.delete('/sellers/:id',async (req,res) =>{
     })
 
 
-    app.post('/myProducts', async(req,res)=>{
+    app.post('/myProducts',verifyJWT, async(req,res)=>{
         const myProduct = req.body;
         const result = await productCollection.insertOne(myProduct);
         res.send(result);
