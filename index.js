@@ -57,12 +57,24 @@ try{
     //load category products
     app.get('/categories/:id', async(req,res)=>{
         const id = req.params.id;
-        const query = {}
-        const products = await productCollection.find(query).toArray();
-        const product_collection = products.filter(p => p.category_id == id)
-        console.log(products, id)
-        res.send(product_collection)
+        const query = {_id:ObjectId(id)}
+        const products = await categoryCollection.findOne(query);
+        res.send(products)
+        // const product_collection = products.filter(p => p.category_id == id)
+        // console.log(products, id)
+        // res.send(product_collection)
     })
+
+    app.get('/allProducts/:id',async(req, res)=>{
+        const brand = req.params.id;
+        // console.log(brand)
+        const query = {Brand:brand};
+        const result = await productCollection.find(query).toArray();
+        console.log(result)
+        res.send(result)
+
+    })
+
 
     //
     // app.put('/sellerVerify/:email', async (req,res)=>{
@@ -100,7 +112,6 @@ try{
     app.get('/addProductCategory', async(req,res)=>{
         const query= {}
         const result =await categoryCollection.find(query).toArray();
-        console.log(result)
         res.send(result)
 
     })
@@ -201,16 +212,18 @@ try{
 
     //addmyProducts
 
-    app.get('/myProducts', async(req,res)=>{
-        const query ={};
-        const myProduct = await myProductsCollection.find(query).toArray();
+    app.get('/myProducts/:email', async(req,res)=>{
+        const email = req.params.email;
+        console.log(email)
+        const query ={sellerEmail : email};
+        const myProduct = await productCollection.find(query).toArray();
         res.send(myProduct);
     })
 
 
     app.post('/myProducts', async(req,res)=>{
         const myProduct = req.body;
-        const result = await myProductsCollection.insertOne(myProduct);
+        const result = await productCollection.insertOne(myProduct);
         res.send(result);
     })
 }
@@ -218,6 +231,7 @@ finally{
 
 }
 }
+
 run().catch(console.log)
 
 
