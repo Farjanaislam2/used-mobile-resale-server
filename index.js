@@ -75,6 +75,34 @@ try{
 
     })
 
+    app.get('/reportedProducts', verifyJWT, async(req, res)=>{
+        const query = {
+            reported : 'true'
+        }
+        const product = await productCollection.find(query).toArray();
+        res.send(product)
+    })
+
+    app.delete('/reportedProducts/:id', verifyJWT, async(req, res)=>{
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const result = await productCollection.deleteOne(filter);
+        res.send(result);
+    })
+
+    app.put('/allProducts/:id',  async (req, res)=>{
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const updateDoc = {
+            $set:{
+                reported: 'true',
+            }
+        }
+        const result = await productCollection.updateOne(filter,updateDoc)
+        res.send(result);
+
+    })
+
 
     //
     // app.put('/sellerVerify/:email', async (req,res)=>{
@@ -152,6 +180,16 @@ try{
         res.send(result);
     })
 
+    //user delte
+        //sellerDelete
+app.delete('/users/:id',async (req,res) =>{
+    const id =req.params.id;
+    const filter = {_id: ObjectId(id)};
+    const result =await usersCollection.deleteOne(filter);
+    res.send(result);
+
+})
+
    
 
 
@@ -162,6 +200,16 @@ try{
         res.send(seller);
     
     })
+
+    //sellerDelete
+app.delete('/sellers/:id',async (req,res) =>{
+    const id =req.params.id;
+    const filter = {_id: ObjectId(id)};
+    const result =await usersCollection.deleteOne(filter);
+    res.send(result);
+
+})
+
 
 //verify
     app.get('/users/sellers/:email',  async(req,res)=>{
@@ -191,10 +239,6 @@ try{
         }
         const result =await usersCollection.updateOne(filter, updatedDoc,options);
     })
-
- 
-
-
 
 
     //seller
